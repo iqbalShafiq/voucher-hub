@@ -1,5 +1,6 @@
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
+import brandRoute from "./presentation/routes/brand.route";
 
 const app = new Elysia()
 	.use(
@@ -7,7 +8,7 @@ const app = new Elysia()
 			path: "/docs",
 		}),
 	)
-	.get("/", () => "Hello Elysia")
+	.use(brandRoute)
 	.listen(3000);
 
 console.log(
