@@ -7,8 +7,8 @@ const brandService = container.get<BrandService>(TYPES.BrandService);
 
 const brandRoute = new Elysia({ prefix: "/brand" }).post(
 	"/",
-	async (body) => {
-		const brand = await brandService.create(body.body);
+	async ({ body }) => {
+		const brand = await brandService.create(body);
 		return {
 			message: "Brand created",
 			data: brand,
