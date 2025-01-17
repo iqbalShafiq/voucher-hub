@@ -10,6 +10,9 @@ export class TransactionRepository implements ITransaction {
 			where: {
 				id,
 			},
+			include: {
+				details: true,
+			},
 		});
 	}
 
@@ -24,7 +27,13 @@ export class TransactionRepository implements ITransaction {
 				throw new Error("Customer not found");
 			}
 
-			if (customer.pointBalance < data.totalPoints) {
+			// Calculate total points required for the transaction
+			const totalPoints = data.details.reduce(
+				(acc, detail) => acc + detail.pointCost * detail.quantity,
+				0,
+			);
+
+			if (customer.pointBalance < totalPoints) {
 				throw new Error("Insufficient points");
 			}
 
@@ -48,7 +57,7 @@ export class TransactionRepository implements ITransaction {
 			const transaction = await tx.transaction.create({
 				data: {
 					customerId: data.customerId,
-					totalPoints: data.totalPoints,
+					totalPoints: totalPoints,
 					status: "PENDING",
 					details: {
 						create: data.details.map((detail) => ({
@@ -68,7 +77,7 @@ export class TransactionRepository implements ITransaction {
 				where: { id: data.customerId },
 				data: {
 					pointBalance: {
-						decrement: data.totalPoints,
+						decrement: totalPoints,
 					},
 				},
 			});

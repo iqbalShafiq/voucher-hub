@@ -8,7 +8,6 @@ export type TransactionDetailItem = {
 
 export type CreateTransaction = {
 	customerId: string;
-	totalPoints: number;
 	details: TransactionDetailItem[];
 };
 
