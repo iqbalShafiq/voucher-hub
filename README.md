@@ -1,6 +1,7 @@
 
 <div align="center">  
   <h1>🎫 Voucher Hub</h1>  
+  <img src="https://github.com/iqbalShafiq/voucher-hub/actions/workflows/test.yml/badge.svg" alt="GitHub Actions Workflows" />
   <p><i>A voucher management system built with Elysia.js and Bun runtime, providing APIs for brand vouchers, transactions, and redemption management.</i></p>  
 
   <p>  
