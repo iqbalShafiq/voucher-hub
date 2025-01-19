@@ -10,11 +10,7 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 		"/",
 		async ({ query }) => {
 			const id = query.id as string;
-			const voucher = await voucherService.getById(id);
-			return {
-				message: "Voucher found",
-				data: voucher,
-			};
+			return await voucherService.getById(id);
 		},
 		{
 			query: t.Object({
@@ -31,7 +27,7 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 								schema: {
 									type: "object",
 									properties: {
-										message: { type: "string" },
+										status: { type: "number" },
 										data: {
 											type: "object",
 											properties: {
@@ -51,6 +47,21 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 							},
 						},
 					},
+					404: {
+						description: "Not Found",
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									properties: {
+										status: { type: "number" },
+										message: { type: "string" },
+										code: { type: "string" },
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -59,11 +70,7 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 		"brand/",
 		async ({ query }) => {
 			const brandId = query.brandId as string;
-			const vouchers = await voucherService.getByBrandId(brandId);
-			return {
-				message: "Vouchers found",
-				data: vouchers,
-			};
+			return await voucherService.getByBrandId(brandId);
 		},
 		{
 			query: t.Object({
@@ -80,7 +87,7 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 								schema: {
 									type: "object",
 									properties: {
-										message: { type: "string" },
+										status: { type: "number" },
 										data: {
 											type: "array",
 											items: {
@@ -103,6 +110,21 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 							},
 						},
 					},
+					404: {
+						description: "Not Found",
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									properties: {
+										status: { type: "number" },
+										message: { type: "string" },
+										code: { type: "string" },
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -110,11 +132,7 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 	.post(
 		"/",
 		async ({ body }) => {
-			const voucher = await voucherService.create(body);
-			return {
-				message: "Voucher created",
-				data: voucher,
-			};
+			return await voucherService.create(body);
 		},
 		{
 			body: t.Object({
@@ -128,14 +146,14 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 				tags: ["Voucher"],
 				description: "Create a voucher",
 				responses: {
-					201: {
+					200: {
 						description: "Created",
 						content: {
 							"application/json": {
 								schema: {
 									type: "object",
 									properties: {
-										message: { type: "string" },
+										status: { type: "number" },
 										data: {
 											type: "object",
 											properties: {
@@ -150,6 +168,21 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 												updatedAt: { type: "string" },
 											},
 										},
+									},
+								},
+							},
+						},
+					},
+					400: {
+						description: "Bad Request",
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									properties: {
+										status: { type: "number" },
+										message: { type: "string" },
+										code: { type: "string" },
 									},
 								},
 							},

@@ -12,11 +12,7 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 		"/",
 		async ({ query }) => {
 			const id = query.id as string;
-			const transaction = await transactionService.getById(id);
-			return {
-				message: "Transaction found",
-				data: transaction,
-			};
+			return await transactionService.getById(id);
 		},
 		{
 			query: t.Object({
@@ -33,7 +29,7 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 								schema: {
 									type: "object",
 									properties: {
-										message: { type: "string" },
+										status: { type: "number" },
 										data: {
 											type: "object",
 											properties: {
@@ -51,6 +47,21 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 							},
 						},
 					},
+					404: {
+						description: "Not Found",
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									properties: {
+										status: { type: "number" },
+										message: { type: "string" },
+										code: { type: "string" },
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -58,11 +69,7 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 	.post(
 		"/",
 		async ({ body }) => {
-			const transaction = await transactionService.create(body);
-			return {
-				message: "Transaction created",
-				data: transaction,
-			};
+			return await transactionService.create(body);
 		},
 		{
 			body: t.Object({
@@ -80,14 +87,14 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 				tags: ["Transaction"],
 				description: "Create a transaction",
 				responses: {
-					201: {
+					200: {
 						description: "Created",
 						content: {
 							"application/json": {
 								schema: {
 									type: "object",
 									properties: {
-										message: { type: "string" },
+										status: { type: "number" },
 										data: {
 											type: "object",
 											properties: {
@@ -100,6 +107,36 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 												updatedAt: { type: "string" },
 											},
 										},
+									},
+								},
+							},
+						},
+					},
+					400: {
+						description: "Bad Request",
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									properties: {
+										status: { type: "number" },
+										message: { type: "string" },
+										code: { type: "string" },
+									},
+								},
+							},
+						},
+					},
+					404: {
+						description: "Not Found",
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									properties: {
+										status: { type: "number" },
+										message: { type: "string" },
+										code: { type: "string" },
 									},
 								},
 							},

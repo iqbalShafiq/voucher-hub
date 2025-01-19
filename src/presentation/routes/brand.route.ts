@@ -8,11 +8,7 @@ const brandService = container.get<BrandService>(TYPES.BrandService);
 const brandRoute = new Elysia({ prefix: "/brand" }).post(
 	"/",
 	async ({ body }) => {
-		const brand = await brandService.create(body);
-		return {
-			message: "Brand created",
-			data: brand,
-		};
+		return await brandService.create(body);
 	},
 	{
 		body: t.Object({
@@ -22,14 +18,14 @@ const brandRoute = new Elysia({ prefix: "/brand" }).post(
 			tags: ["Brand"],
 			description: "Create a brand",
 			responses: {
-				201: {
+				200: {
 					description: "Created",
 					content: {
 						"application/json": {
 							schema: {
 								type: "object",
 								properties: {
-									message: { type: "string" },
+									status: { type: "number" },
 									data: {
 										type: "object",
 										properties: {
@@ -39,6 +35,21 @@ const brandRoute = new Elysia({ prefix: "/brand" }).post(
 											updatedAt: { type: "string" },
 										},
 									},
+								},
+							},
+						},
+					},
+				},
+				400: {
+					description: "Bad Request",
+					content: {
+						"application/json": {
+							schema: {
+								type: "object",
+								properties: {
+									status: { type: "number" },
+									message: { type: "string" },
+									code: { type: "string" },
 								},
 							},
 						},
