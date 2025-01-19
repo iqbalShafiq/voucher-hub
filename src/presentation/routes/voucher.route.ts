@@ -69,12 +69,12 @@ const voucherRoute = new Elysia({ prefix: "/voucher" })
 	.get(
 		"brand/",
 		async ({ query }) => {
-			const brandId = query.brandId as string;
+			const brandId = query.id as string;
 			return await voucherService.getByBrandId(brandId);
 		},
 		{
 			query: t.Object({
-				brandId: t.String(),
+				id: t.String(),
 			}),
 			detail: {
 				tags: ["Voucher"],

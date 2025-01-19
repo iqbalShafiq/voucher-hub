@@ -11,12 +11,12 @@ const transactionRoute = new Elysia({ prefix: "/transaction/redemption" })
 	.get(
 		"/",
 		async ({ query }) => {
-			const id = query.id as string;
+			const id = query.transactionId as string;
 			return await transactionService.getById(id);
 		},
 		{
 			query: t.Object({
-				id: t.String(),
+				transactionId: t.String(),
 			}),
 			detail: {
 				tags: ["Transaction"],
