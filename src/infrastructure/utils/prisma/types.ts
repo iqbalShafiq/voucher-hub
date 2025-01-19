@@ -1,13 +1,29 @@
 export interface ErrorResponse {
-	status: number;
+	status: 400 | 404 | 500;
+	data?: never;
 	message: string;
-	code?: string;
+	code: string;
 	details?: unknown;
 }
 
-export interface SuccessResponse<T> {
+export type PrismaResponse<T> = {
 	status: number;
-	data: T;
-}
-
-export type PrismaResponse<T> = SuccessResponse<T | null> | ErrorResponse;
+	message?: string;
+	code?: string;
+	details?: unknown;
+} & (
+	| {
+			status: 200;
+			data: T | null;
+			message?: never;
+			code?: never;
+			details?: never;
+	  }
+	| {
+			status: 400 | 404 | 500;
+			data?: never;
+			message: string;
+			code: string;
+			details?: unknown;
+	  }
+);

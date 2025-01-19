@@ -1,7 +1,10 @@
-import type { Transaction } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { injectable } from "inversify";
-import type { CreateTransaction, ITransaction } from "../entities/transaction";
+import type {
+	CreateTransaction,
+	ITransaction,
+	TransactionWithDetails,
+} from "../entities/transaction";
 import { prismaSafeCall } from "../utils/prisma/executor";
 import { prisma } from "../utils/prisma/prisma";
 import PrismaErrorCode from "../utils/prisma/prismaErrorCode";
@@ -9,7 +12,7 @@ import type { PrismaResponse } from "../utils/prisma/types";
 
 @injectable()
 export class TransactionRepository implements ITransaction {
-	async getById(id: string): Promise<PrismaResponse<Transaction>> {
+	async getById(id: string): Promise<PrismaResponse<TransactionWithDetails>> {
 		return prismaSafeCall.execute(async () => {
 			return prisma.transaction.findUnique({
 				where: {
@@ -22,7 +25,9 @@ export class TransactionRepository implements ITransaction {
 		});
 	}
 
-	async create(data: CreateTransaction): Promise<PrismaResponse<Transaction>> {
+	async create(
+		data: CreateTransaction,
+	): Promise<PrismaResponse<TransactionWithDetails>> {
 		return prismaSafeCall.execute(async () => {
 			return prisma.$transaction(async (tx) => {
 				// Verify customer exists and has enough points

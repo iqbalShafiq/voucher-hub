@@ -1,7 +1,14 @@
-import {PrismaClientKnownRequestError, PrismaClientValidationError,} from "@prisma/client/runtime/library";
-import {handleKnownError, handleUnknownError, handleValidationError,} from "./errorHandler";
+import {
+	PrismaClientKnownRequestError,
+	PrismaClientValidationError,
+} from "@prisma/client/runtime/library";
+import {
+	handleKnownError,
+	handleUnknownError,
+	handleValidationError,
+} from "./errorHandler";
 import StatusCode from "./statusCode";
-import {PrismaResponse} from "./types";
+import type { PrismaResponse } from "./types";
 
 /**
  * Handles Prisma errors and returns a response object
@@ -23,6 +30,8 @@ export const prismaSafeCall = {
 				return {
 					status: StatusCode.NOT_FOUND,
 					message: "Record not found",
+					data: undefined,
+					code: "NOT_FOUND",
 				};
 			}
 

@@ -1,4 +1,4 @@
-import type { Transaction } from "@prisma/client";
+import type { Transaction, TransactionDetail } from "@prisma/client";
 import type { PrismaResponse } from "../utils/prisma/types";
 
 export type TransactionDetailItem = {
@@ -12,7 +12,13 @@ export type CreateTransaction = {
 	details: TransactionDetailItem[];
 };
 
+export type TransactionWithDetails = Transaction & {
+	details: TransactionDetail[];
+};
+
 export interface ITransaction {
-	getById: (id: string) => Promise<PrismaResponse<Transaction>>;
-	create: (data: CreateTransaction) => Promise<PrismaResponse<Transaction>>;
+	getById: (id: string) => Promise<PrismaResponse<TransactionWithDetails>>;
+	create: (
+		data: CreateTransaction,
+	) => Promise<PrismaResponse<TransactionWithDetails>>;
 }

@@ -15,19 +15,21 @@ export const handleKnownError = (
 	switch (error.code) {
 		case PrismaErrorCode.DUPLICATE_ENTRY:
 			status = StatusCode.BAD_REQUEST;
-			message = `Duplicate entry for ${error.meta?.target as string[]}`;
+			message =
+				error.message ??
+				`Duplicate entry for ${error.meta?.target as string[]}`;
 			break;
 		case PrismaErrorCode.INVALID_RELATION:
 			status = StatusCode.BAD_REQUEST;
-			message = "Invalid relation data provided";
+			message = error.message ?? "Invalid relation data provided";
 			break;
 		case PrismaErrorCode.INVALID_REFERENCE:
 			status = StatusCode.BAD_REQUEST;
-			message = "Invalid reference to related resource";
+			message = error.message ?? "Invalid reference to related resource";
 			break;
 		case PrismaErrorCode.NOT_FOUND:
 			status = StatusCode.NOT_FOUND;
-			message = "Record not found";
+			message = error.message ?? "Record not found";
 			break;
 	}
 
@@ -46,6 +48,7 @@ export const handleValidationError = (
 		status: StatusCode.BAD_REQUEST,
 		message: "Validation error: Invalid data provided",
 		details: error.message,
+		code: "VALIDATION_ERROR",
 	};
 };
 
@@ -54,5 +57,6 @@ export const handleUnknownError = (error: unknown): ErrorResponse => {
 		status: StatusCode.SERVER_ERROR,
 		message: "An unexpected error occurred",
 		details: error instanceof Error ? error.message : "Unknown error",
+		code: "UNKNOWN_ERROR",
 	};
 };
